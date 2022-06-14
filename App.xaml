@@ -4,6 +4,138 @@
              xmlns:local="clr-namespace:ChurchManagementPortal"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style TargetType="Button" x:Key="btnBlue">
+            <Setter Property="Background" Value="#00f"/>
+            <Setter Property="Foreground" Value="#fff"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                            CornerRadius="5"
+                            BorderThickness="1"
+                            BorderBrush="LightGray"
+                            Padding="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#fff" />
+                    <Setter Property="Foreground" Value="#00f" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Button" x:Key="btnBlueInverse" BasedOn="{StaticResource btnBlue}">
+            <Setter Property="Background" Value="#fff" />
+            <Setter Property="Foreground" Value="#00f" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#00f" />
+                    <Setter Property="Foreground" Value="#fff" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Button" x:Key="btnGreenInverse" BasedOn="{StaticResource btnBlue}">
+            <Setter Property="Background" Value="#fff" />
+            <Setter Property="Foreground" Value="#0a0" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#0a0" />
+                    <Setter Property="Foreground" Value="#fff" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Button" x:Key="btnGreen" BasedOn="{StaticResource btnBlue}">
+            <Setter Property="Background" Value="#0a0" />
+            <Setter Property="Foreground" Value="#fff" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#fff" />
+                    <Setter Property="Foreground" Value="#0a0" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Button" x:Key="btnDefault" BasedOn="{StaticResource btnBlue}">
+            <Setter Property="Foreground" Value="#000" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="LightGray"/>
+                    <Setter Property="Foreground" Value="#fff"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Button" x:Key="btnRedInverse" BasedOn="{StaticResource btnBlue}">
+            <Setter Property="Background" Value="#fff"/>
+            <Setter Property="Foreground" Value="#f00" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#f00"/>
+                    <Setter Property="Foreground" Value="#fff"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Button" x:Key="btnRed" BasedOn="{StaticResource btnBlue}">
+            <Setter Property="Foreground" Value="#fff" />
+            <Setter Property="Background" Value="#f00" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#fff"/>
+                    <Setter Property="Foreground" Value="#f00"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Expander">
+            <Setter Property="Margin" Value="10,10,10,0" />
+        </Style>
+
+        <Style TargetType="Button" x:Key="menuItem" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#000" />
+            <Setter Property="Margin" Value="15,0,0,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                            CornerRadius="5"
+                            Padding="5">
+                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Foreground" Value="Green" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="5" />
+        </Style>
+
+        <Style TargetType="PasswordBox">
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="PasswordChar" Value="#" />
+        </Style>
+
+        <Style x:Key="lblError" TargetType="Label">
+            <Setter Property="Foreground" Value="Red" />
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="Height" Value="25" />
+        </Style>
+
     </Application.Resources>
 </Application>

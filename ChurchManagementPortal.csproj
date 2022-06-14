@@ -4,7 +4,16 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>CMP.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="TabbedPage1.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="TabbedPage1.xaml" />
+  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="MySql.Data">

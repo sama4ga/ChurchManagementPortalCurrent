@@ -1,0 +1,28 @@
+﻿<Window x:Class="ChurchManagementPortal.winLogin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ChurchManagementPortal"
+        mc:Ignorable="d"
+        Title="Login" Height="300" Width="700" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow">
+    <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="400" />
+        </Grid.ColumnDefinitions>
+        <Label Grid.Column="0" Grid.Row="0" Content="Username" />
+        <TextBox  Grid.Column="1" Grid.Row="0" x:Name="txtUsername" Margin="0,0,0,40" />
+        <Label x:Name="lblUsernameError"  Grid.Row="0" Grid.Column="1" Margin="0,10,0,0" Style="{StaticResource lblError}" />
+        <Label Grid.Column="0" Grid.Row="1" Content="Password" />
+        <PasswordBox PasswordChar="#"  Grid.Column="1" Grid.Row="1" x:Name="txtPasssword" Margin="0,0,0,40" />
+        <Label x:Name="lblPasswordError"  Grid.Row="1" Grid.Column="1" Margin="0,10,0,0" Style="{StaticResource lblError}" />
+        <Button x:Name="btnCancel" Click="btnCancel_Click" Content="Cancel" Grid.Column="1" Grid.Row="2" Style="{StaticResource btnGreen}" IsCancel="True" Width="100" Margin="0,0,300,0"/>
+        <Button x:Name="btnLogin" Click="btnLogin_Click" Content="Login" Grid.Column="1" Grid.Row="2" Style="{StaticResource btnGreen}" IsDefault="True" Width="100" Margin="0"/>
+    </Grid>
+</Window>

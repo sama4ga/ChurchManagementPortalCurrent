@@ -82,5 +82,41 @@ namespace ChurchManagementPortal.Properties {
                 this["database"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Holy Rosary Autonomous Catholic Church")]
+        public string churchName {
+            get {
+                return ((string)(this["churchName"]));
+            }
+            set {
+                this["churchName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("27 Itu Road, Uyo")]
+        public string churchAdress {
+            get {
+                return ((string)(this["churchAdress"]));
+            }
+            set {
+                this["churchAdress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Holy Rosary! A Prayer of faith")]
+        public string churchSlogan {
+            get {
+                return ((string)(this["churchSlogan"]));
+            }
+            set {
+                this["churchSlogan"] = value;
+            }
+        }
     }
 }

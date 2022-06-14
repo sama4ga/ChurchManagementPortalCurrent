@@ -5,8 +5,52 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChurchManagementPortal"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Church Management Portal" Height="450" Width="800" WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Grid>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="20"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Label Content="{Binding churchName}" />
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <StackPanel MaxWidth="200" MinWidth="120" Grid.Column="0">
+                <Button x:Name="btnAddNewParishioner" Click="btnAddNewParishioner_Click" Content="Add New Parishioner" Style="{StaticResource menuItem}" Margin="10,20,0,0" />
+                <Expander Header="Organisation">
+                    <StackPanel Margin="5,5,5,0">
+                        <Button x:Name="btnAddNewOrganisation" Click="btnAddNewOrganisation_Click" Content="Add New Organisation" Style="{StaticResource menuItem}" />
+                        <Button Content="View Organisation" Style="{StaticResource menuItem}" />                        
+                    </StackPanel>
+                </Expander>
+                <Expander Header="Manage Station">
+                    <StackPanel Margin="5,5,5,0">
+                        <Button Content="Add New Station" Style="{StaticResource menuItem}" />
+                        <Button Content="View Station" Style="{StaticResource menuItem}"/>
+                    </StackPanel>
+                </Expander>
+                <Expander Header="Manage Society">
+                    <StackPanel Margin="5,5,5,0">
+                        <Button Content="Add New Society" Style="{StaticResource menuItem}" />
+                        <Button Content="View Society" Style="{StaticResource menuItem}"/>
+                    </StackPanel>
+                </Expander>
+                <Expander Header="Manage Users">
+                    <StackPanel Margin="5,5,5,0">
+                        <Button x:Name="btnAddNewUser" Click="btnAddNewUser_Click" Content="Add New User" Style="{StaticResource menuItem}" />
+                        <Button Content="View User" Style="{StaticResource menuItem}"/>
+                    </StackPanel>
+                </Expander>
+            </StackPanel>
+            <GridSplitter Width="5" Grid.Column="1"></GridSplitter>
+            <Frame x:Name="frame" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="2"></Frame>
+        </Grid>
+        <StatusBar Grid.Row="2"></StatusBar>
     </Grid>
 </Window>

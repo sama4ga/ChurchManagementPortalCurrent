@@ -17,5 +17,14 @@
     <Setting Name="database" Type="System.String" Scope="User">
       <Value Profile="(Default)">cmp</Value>
     </Setting>
+    <Setting Name="churchName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Holy Rosary Autonomous Catholic Church</Value>
+    </Setting>
+    <Setting Name="churchAdress" Type="System.String" Scope="User">
+      <Value Profile="(Default)">27 Itu Road, Uyo</Value>
+    </Setting>
+    <Setting Name="churchSlogan" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Holy Rosary! A Prayer of faith</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

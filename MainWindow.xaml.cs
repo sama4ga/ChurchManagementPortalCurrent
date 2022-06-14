@@ -12,8 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.ServiceProcess;
-using MySql.Data.MySqlClient;
 
 namespace ChurchManagementPortal
 {
@@ -23,11 +21,27 @@ namespace ChurchManagementPortal
     public partial class MainWindow : Window
     {
         SQL sql = new();
+        private string churchName = Properties.Settings.Default.churchName;
 
         public MainWindow()
         {
             InitializeComponent();
-            if (sql.ExecuteQuery("SELECT * FROM `user`;")){ _ = MessageBox.Show("Success"); }
+        }
+
+        private void btnAddNewOrganisation_Click(object sender, RoutedEventArgs e)
+        {
+            winLogin login = new();
+            login.Show();
+        }
+
+        private void btnAddNewParishioner_Click(object sender, RoutedEventArgs e)
+        {
+            frame.Content = new pgAddNewParishioner();
+        }
+
+        private void btnAddNewUser_Click(object sender, RoutedEventArgs e)
+        {
+            frame.Content = new pgAddNewUser();
         }
     }
 }
