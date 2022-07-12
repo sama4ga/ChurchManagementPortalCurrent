@@ -4,6 +4,7 @@ using MySql.Data.MySqlClient;
 using System.Data;
 using System.IO;
 using System.Diagnostics;
+using System.Windows.Controls;
 
 namespace ChurchManagementPortal
 {
@@ -36,6 +37,7 @@ namespace ChurchManagementPortal
                 UserID = uid
             };
             con = new MySqlConnection(connectionstring.ToString());
+            error = null;
             try
             {
                 if (con.State != ConnectionState.Open)
@@ -46,7 +48,7 @@ namespace ChurchManagementPortal
             }
             catch (MySqlException e)
             {
-                error = new Error(e.Message, e.ErrorCode, "MYSQL");
+                error = new Error(e.Message, e.Number, "MYSQL");
                 return false;
             }
 
@@ -86,7 +88,7 @@ namespace ChurchManagementPortal
             }
             catch (MySqlException e)
             {
-                error = new Error(e.Message, e.ErrorCode, "MYSQL");
+                error = new Error(e.Message, e.Number, "MYSQL");
                 return false;
             }
         }
@@ -97,6 +99,7 @@ namespace ChurchManagementPortal
         /// <returns></returns>
         public MySqlConnection GetCon()
         {
+            OpenCon();
             return con;
         }
 
@@ -106,14 +109,13 @@ namespace ChurchManagementPortal
         /// <param name="query">Query string</param>
         /// <param name="ParamValues">A list containing values for parameters used in the query</param>
         /// <returns>true if query is successful and false if otherwise</returns>
-        public bool InsertQuery(string query, List<object>[] ParamValues)
+        public bool InsertQuery(string query, List<object> ParamValues)
         {
             try
             {
                 if (OpenCon())
                 {
                     cmd = new MySqlCommand(query, con);
-                    cmd.Prepare();
                     string paramName = "";
 
                     //if (cmd.IsPrepared) {
@@ -126,6 +128,7 @@ namespace ChurchManagementPortal
                         count++;
                     }
 
+                    cmd.Prepare();
                     cmd.ExecuteNonQuery();
                     return true;
                 }
@@ -137,7 +140,7 @@ namespace ChurchManagementPortal
             }
             catch (MySqlException e)
             {
-                error = new Error(e.Message, e.ErrorCode, "MYSQL");
+                error = new Error(e.Message, e.Number, "MYSQL");
                 return false;
             }
             finally
@@ -155,7 +158,7 @@ namespace ChurchManagementPortal
         /// <param name="ParamValues">values for parameters used in the query</param>
         /// <param name="insertId">Output which signifies the LastInsertId </param>
         /// <returns>true if query is successful and false otherwise</returns>
-        public bool InsertQuery(string query, List<object>[] ParamValues, out long insertId)
+        public bool InsertQuery(string query, List<object> ParamValues, out long insertId)
         {
             try
             {
@@ -189,7 +192,7 @@ namespace ChurchManagementPortal
             catch (MySqlException e)
             {
                 insertId = 0;
-                error = new Error(e.Message, e.ErrorCode, "MYSQL");
+                error = new Error(e.Message, e.Number, "MYSQL");
                 return false;
             }
             finally
@@ -207,7 +210,7 @@ namespace ChurchManagementPortal
         /// <param name="query">Query string</param>
         /// <param name="ParamValues">A list containing values for parameters used in the query</param>
         /// <returns>true if query is successful and false otherwise</returns>
-        public bool UpdateQuery(string query, List<object>[] ParamValues)
+        public bool UpdateQuery(string query, List<object> ParamValues)
         {
             try
             {
@@ -218,7 +221,7 @@ namespace ChurchManagementPortal
 
                     //if (cmd.IsPrepared) {
                     cmd.Parameters.Clear();
-                    cmd.Parameters.AddRange(ParamValues);
+                    cmd.Parameters.AddRange(ParamValues.ToArray());
 
                     cmd.ExecuteNonQuery();
                     return true;
@@ -231,7 +234,7 @@ namespace ChurchManagementPortal
             }
             catch (MySqlException e)
             {
-                error = new Error(e.Message, e.ErrorCode, "MYSQL");
+                error = new Error(e.Message, e.Number, "MYSQL");
                 return false;
             }
             finally
@@ -265,7 +268,7 @@ namespace ChurchManagementPortal
             }
             catch (MySqlException e)
             {
-                error = new Error(e.Message, e.ErrorCode, "MYSQL");
+                error = new Error(e.Message, e.Number, "MYSQL");
                 return false;
             }
             finally
@@ -291,7 +294,7 @@ namespace ChurchManagementPortal
                     //dr = cmd.ExecuteReader();
                     da = new MySqlDataAdapter(cmd);
                     dt = new DataTable(datasetName);
-                    ds = new DataSet(datasetName);
+                    ds = new DataSet();
 
                     da.Fill(dt);
                     ds.Tables.Add(dt);
@@ -305,8 +308,74 @@ namespace ChurchManagementPortal
             }
             catch (MySqlException e)
             {
-                error = new Error(e.Message, e.ErrorCode, "MYSQL");
+                error = new Error(e.Message, e.Number, "MYSQL");
                 return false;
+            }
+            finally
+            {
+                da.Dispose();
+                cmd.Dispose();
+                CloseCon();
+            }
+        }
+
+        public void fillComboBox(string query, ComboBox comboBox, string datasetName="")
+        {
+            try
+            {
+                if (OpenCon())
+                {
+                    cmd = new MySqlCommand(query, con);
+                    //dr = cmd.ExecuteReader();
+                    da = new MySqlDataAdapter(cmd);
+                    dt = new DataTable(datasetName);
+                    ds = new DataSet();
+
+                    da.Fill(dt);
+                    ds.Tables.Add(dt);
+
+                    comboBox.DisplayMemberPath = dt.Columns[1].ColumnName;
+                    comboBox.SelectedValuePath = dt.Columns[0].ColumnName;
+                    comboBox.ItemsSource = dt.DefaultView;
+                }
+
+            }
+            catch (MySqlException e)
+            {
+                error = new Error(e.Message, e.Number, "MYSQL");
+            }
+            finally
+            {
+                da.Dispose();
+                cmd.Dispose();
+                CloseCon();
+            }
+        }
+
+        public void fillListBox(string query, ListBox listBox, string datasetName = "")
+        {
+            try
+            {
+                if (OpenCon())
+                {
+                    cmd = new MySqlCommand(query, con);
+                    //dr = cmd.ExecuteReader();
+                    da = new MySqlDataAdapter(cmd);
+                    dt = new DataTable(datasetName);
+                    ds = new DataSet();
+
+                    da.Fill(dt);
+                    ds.Tables.Add(dt);
+
+                    listBox.DisplayMemberPath = dt.Columns[1].ColumnName;
+                    listBox.SelectedValuePath = dt.Columns[0].ColumnName;
+                    listBox.ItemsSource = dt.DefaultView;
+                }
+
+            }
+            catch (MySqlException e)
+            {
+                error = new Error(e.Message, e.Number, "MYSQL");
             }
             finally
             {
@@ -338,7 +407,7 @@ namespace ChurchManagementPortal
                 {
                     _ = Directory.CreateDirectory(Directory.GetCurrentDirectory() + "\\Backup");
                 }
-                path = Directory.GetCurrentDirectory() + "\\Backup\\MySqlBackup.sql"; // + year + "-" + month + "-" + day + "-" + hour + "-" + minute + "-" + second + "-" + millisecond + ".sql";
+                path = Directory.GetCurrentDirectory() + "\\Backup\\MySqlBackup.sql"; // + year + month + day + hour + minute + second + millisecond + ".sql";
                 StreamWriter file = new(path);
 
                 ProcessStartInfo psi = new()

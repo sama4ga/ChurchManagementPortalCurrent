@@ -9,10 +9,12 @@ namespace ChurchManagementPortal
     public partial class winLogin : Window
     {
         SQL sql = new();
+        Utility utility = new();
 
         public winLogin()
         {
             InitializeComponent();
+            txtUsername.Focus();
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
@@ -26,18 +28,18 @@ namespace ChurchManagementPortal
             lblUsernameError.Content = "";
             string username = txtUsername.Text;
             string password = txtPasssword.Password;
-            bool error = false;
-            if (string.IsNullOrWhiteSpace(username.Trim()))
+            bool hasError = false;
+            if (utility.checkNullOrEmpty(username))
             {
                 lblUsernameError.Content = "Username is required";
-                error = true;
+                hasError = true;
             }
-            if (string.IsNullOrWhiteSpace(password.Trim()))
+            if (utility.checkNullOrEmpty(password))
             {
                 lblPasswordError.Content = "Password is required";
-                error = true;
+                hasError = true;
             }
-            if (!error)
+            if (!hasError)
             {
                 if (sql.ReadData("SELECT * FROM `user` WHERE `username`='"+ username +"' AND `password`=sha1('"+ password +"');","login"))
                 {
@@ -45,7 +47,9 @@ namespace ChurchManagementPortal
                     if (ds.Tables["login"].Rows.Count == 1)
                     {
                         int userId = ds.Tables["login"].Rows[0].Field<int>("userId");
-                        MainWindow main = new();
+                        string priviledge = ds.Tables["login"].Rows[0].Field<string>("priviledge");
+                        User user = new(userId, username, password, priviledge);
+                        MainWindow main = new(user);
                         main.Show();
                         Close();
                     }

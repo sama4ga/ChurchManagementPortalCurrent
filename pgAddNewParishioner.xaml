@@ -4,11 +4,133 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ChurchManagementPortal"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="Add New Parishioner">
+      mc:Ignorable="d"
+      Title="Add New Parishioner" Width="1180" Height="550">
 
-    <Grid>
-        <Label Content="Add New Parishioner" />
-    </Grid>
+    <ScrollViewer>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="2*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.2*" />
+                <ColumnDefinition Width="0.8*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Content="Add New Parishioner" Grid.Row="0" Grid.ColumnSpan="3" Style="{StaticResource lblHeading}" Margin="0"/>
+            <GroupBox Header="Personal Details" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Padding="5">
+                <Grid>
+                    <Image HorizontalAlignment="Left" Height="125" Margin="590,17,0,0" VerticalAlignment="Top" Width="150" x:Name="picPassport" StretchDirection="Both" Stretch="Fill"/>
+                    <Button Content="Load Passport..." HorizontalAlignment="Left" Margin="590,160,0,0" VerticalAlignment="Top" Height="35" Width="150" x:Name="btnLoadPassport" Click="btnLoadPassport_Click" />
+                    <TextBlock Text="Id (Leave blank to auto generate)" HorizontalAlignment="Left" Margin="30,10,0,0" VerticalAlignment="Top" TextWrapping="Wrap" Width="120"/>
+                    <TextBox HorizontalAlignment="Left" Margin="30,44,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" x:Name="txtPId" TabIndex="0"/>
+                    <Label Content="Title" HorizontalAlignment="Left" Margin="150,17,0,0" VerticalAlignment="Top" Width="50"/>
+                    <TextBox HorizontalAlignment="Left" Margin="155,44,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" x:Name="txtTitle" TabIndex="0"/>
+                    <Label Content="Surname" HorizontalAlignment="Left" Margin="250,16,0,0" VerticalAlignment="Top"/>
+                    <TextBox HorizontalAlignment="Left" Margin="255,44,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" x:Name="txtSurname" TabIndex="1"/>
+                    <Label Content="Other Names" HorizontalAlignment="Left" Margin="370,16,0,0" VerticalAlignment="Top"/>
+                    <TextBox HorizontalAlignment="Left" Margin="375,44,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" Name="txtOthernames" TabIndex="2"/>
+                    <Label Content="Home Address" HorizontalAlignment="Left" Margin="30,74,0,0" VerticalAlignment="Top"/>
+                    <TextBox HorizontalAlignment="Left" Margin="35,103,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="540" x:Name="txtResAddress" TabIndex="3"/>
+                    <Label Content="Office Address" HorizontalAlignment="Left" Margin="30,133,0,0" VerticalAlignment="Top"/>
+                    <TextBox HorizontalAlignment="Left" Margin="35,163,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="540" x:Name="txtOfficeAddress" TabIndex="4"/>
+                    <Label Content="Phone Number" HorizontalAlignment="Left" Margin="30,193,0,0" VerticalAlignment="Top"/>
+                    <TextBox HorizontalAlignment="Left" Margin="35,222,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="247" x:Name="txtPhoneNo" TabIndex="5"/>
+                    <Label Content="Gender" HorizontalAlignment="Left" Margin="349,193,0,0" VerticalAlignment="Top"/>
+                    <StackPanel Orientation="Horizontal" Margin="354,223,279,182" Width="150" Height="25">
+                        <RadioButton Content="Male" Height="19" x:Name="rdMale" Margin="5,0,10,0" TabIndex="6"/>
+                        <RadioButton Content="Female" Height="19" x:Name="rdFemale" TabIndex="7"/>                        
+                    </StackPanel>
+                    <Label Content="Date of Birth" HorizontalAlignment="Left" Margin="533,200,0,0" VerticalAlignment="Top"/>
+                    <DatePicker HorizontalAlignment="Left" Margin="533,226,0,0" VerticalAlignment="Top" Width="183" x:Name="dtpDOB" TabIndex="8"/>
+                    <Label Content="Email" HorizontalAlignment="Left" Margin="30,253,0,0" VerticalAlignment="Top"/>
+                    <TextBox HorizontalAlignment="Left" Margin="35,282,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="247" x:Name="txtEmail" TabIndex="9"/>
+                    <Label Content="Marital Status" HorizontalAlignment="Left" Margin="351,253,0,0" VerticalAlignment="Top"/>
+                    <StackPanel Orientation="Horizontal" Width="350" Height="25" Margin="300,170,0,0">                        
+                        <RadioButton Content="Single" Margin="5,5,0,0" x:Name="rdSingle" TabIndex="10" Checked="rdSingle_Checked" Unchecked="rdSingle_Unchecked"/>
+                        <RadioButton Content="Married" Margin="10,5,0,0" x:Name="rdMarried" TabIndex="11"/>
+                        <RadioButton Content="Divorced" Margin="10,5,0,0" x:Name="rdDivorced" TabIndex="12"/>
+                        <RadioButton Content="Widow" Margin="10,5,0,0" x:Name="rdWidow" TabIndex="13"/>
+                        <RadioButton Content="Widower" Margin="10,5,0,0" x:Name="rdWidower" TabIndex="14"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="352,314,0,0" x:Name="stkSpouseName" Visibility="Hidden">                        
+                        <Label Content="Name of Spouse" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+                        <TextBox HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="260" x:Name="txtSpouseName" TabIndex="15"/>
+                    </StackPanel>
+                    <Label Content="Occupation" HorizontalAlignment="Left" Margin="30,313,0,0" VerticalAlignment="Top"/>
+                    <TextBox HorizontalAlignment="Left" Margin="35,341,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="247" x:Name="txtOccupation" TabIndex="16"/>
+                    <Label Content="State of Origin" HorizontalAlignment="Left" Margin="30,376,0,0" VerticalAlignment="Top"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="35,404,0,0" VerticalAlignment="Top" Width="244" x:Name="cmbStateOfOrigin" SelectionChanged="cmbStateOfOrigin_SelectionChanged" TabIndex="17"/>
+                    <Label Content="Local Government of Origin" HorizontalAlignment="Left" Margin="358,375,0,0" VerticalAlignment="Top"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="358,404,0,0" VerticalAlignment="Top" Width="256" x:Name="cmbLGA" TabIndex="18"/>
+                </Grid>
+
+            </GroupBox>
+            <StackPanel Orientation="Vertical"  Grid.Row="1" Grid.Column="2">
+                <GroupBox Header="Lay Apostolates" Height="190">
+                    <!--<ScrollViewer>-->
+                        <Grid>
+                            <ListBox SelectionMode="Multiple" x:Name="lstLayApostolates" TabIndex="19"></ListBox>
+                        </Grid>
+                    <!--</ScrollViewer>-->
+                </GroupBox>
+                <GroupBox Header="Other Societies" Height="190">
+                    <!--<ScrollViewer>-->
+                        <Grid>
+                            <ListBox SelectionMode="Multiple" x:Name="lstOtherSocieties" TabIndex="20"></ListBox>
+                        </Grid>
+                    <!--</ScrollViewer>-->
+                </GroupBox>
+                <Label Content="What can you do for us" Margin="10,5,10,0"/>
+                <TextBox x:Name="txtWhatCanYouDo" Margin="10,0,10,0" TabIndex="21"/>
+            </StackPanel>
+            <GroupBox Header="Church Details" Grid.Row="2" Grid.Column="0">
+                <Grid>
+                    <Label Content="Diocese of Origin" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="130,10,0,0" VerticalAlignment="Top" Width="320" x:Name="cmbDiocese" SelectionChanged="cmbDiocese_SelectionChanged" TabIndex="22"/>
+                    <Label Content="Deanery of Origin" HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="130,42,0,0" VerticalAlignment="Top" Width="320" x:Name="cmbDeanery" SelectionChanged="cmbDeanery_SelectionChanged" TabIndex="23"/>
+                    <Label Content="Parish of Origin" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="130,73,0,0" VerticalAlignment="Top" Width="320" x:Name="cmbParish" TabIndex="24"/>
+                    <Label Content="Station" HorizontalAlignment="Left" Margin="10,104,0,0" VerticalAlignment="Top"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="130,104,0,0" VerticalAlignment="Top" Width="320" x:Name="cmbStation" TabIndex="25"/>
+                    <Label Content="Organisation" HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="130,134,0,0" VerticalAlignment="Top" Width="320" x:Name="cmbOrganisation" SelectionChanged="cmbOrganisation_SelectionChanged" TabIndex="26"/>
+                    <Label Content="Society" HorizontalAlignment="Left" Margin="10,165,0,0" VerticalAlignment="Top"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="130,165,0,0" VerticalAlignment="Top" Width="320" x:Name="cmbSociety" TabIndex="27"/>
+                    <Label Content="Sacrament Received" HorizontalAlignment="Left" Margin="10,196,0,0" VerticalAlignment="Top"/>
+                    <CheckBox Content="Baptism" HorizontalAlignment="Left" Margin="128,207,0,0" VerticalAlignment="Top" x:Name="chkBaptism" TabIndex="28"/>
+                    <CheckBox Content="Communion" HorizontalAlignment="Left" Margin="196,207,0,0" VerticalAlignment="Top" x:Name="chkCommunion" TabIndex="29"/>
+                    <CheckBox Content="Confirmation" HorizontalAlignment="Left" Margin="286,207,0,0" VerticalAlignment="Top" x:Name="chkConfirmation" TabIndex="30"/>
+                    <CheckBox Content="Marriage" HorizontalAlignment="Left" Margin="380,207,0,0" VerticalAlignment="Top" x:Name="chkMarriage" TabIndex="31"/>
+
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Next of Kin Details" Grid.Row="2" Grid.Column="1">
+                <Grid>
+                    <Label Content="Name" HorizontalAlignment="Left" Margin="10,21,0,0" VerticalAlignment="Top"/>
+                    <TextBox HorizontalAlignment="Left" Margin="10,52,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="280" x:Name="txtNextOfKinName" TabIndex="32"/>
+                    <Label Content="Phone Number" HorizontalAlignment="Left" Margin="10,84,0,0" VerticalAlignment="Top"/>
+                    <TextBox HorizontalAlignment="Left" Margin="10,113,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="280" x:Name="txtNextOfKinPhoneNo" TabIndex="33"/>
+                    <Label Content="Address" HorizontalAlignment="Left" Margin="10,145,0,0" VerticalAlignment="Top"/>
+                    <TextBox HorizontalAlignment="Left" Margin="10,174,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="280" x:Name="txtNextOfKinAddress" TabIndex="34"/>
+
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Pious Societies" Grid.Row="2" Grid.Column="2">
+                <!--<ScrollViewer>-->
+                    <Grid>
+                        <ListBox SelectionMode="Multiple" x:Name="lstPiousSocieties" TabIndex="35"></ListBox>
+                    </Grid>
+                <!--</ScrollViewer>-->
+            </GroupBox>
+            <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center" Grid.ColumnSpan="3" Margin="0,10,0,0">
+                <Button x:Name="btnReset" Click="btnReset_Click" Content="Reset" Style="{StaticResource btnBlueInverse}" IsCancel="True" TabIndex="37" Width="200"/>
+                <Button x:Name="btnAddParishioner" Click="btnAddParishioner_Click" Content="Add Parishioner" Style="{StaticResource btnBlue}" IsDefault="True" TabIndex="36" Width="200" Height="40"/>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
 </Page>

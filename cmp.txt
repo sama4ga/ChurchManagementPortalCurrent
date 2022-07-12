@@ -1,0 +1,445 @@
+CREATE DATABASE IF NOT EXISTS `cmp`;
+
+CREATE TABLE IF NOT EXISTS `country`(
+	`countryId` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`name` varchar(100)
+)COMMENT="Holds records of countries";
+
+CREATE TABLE IF NOT EXISTS `state`(
+	`stateId` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`countryId` INT NULL,
+	`name` varchar(100),
+	FOREIGN KEY (`countryId`) REFERENCES `country`(`countryId`) ON DELETE CASCADE ON UPDATE CASCADE
+)COMMENT="Holds records of states in the country";
+
+CREATE TABLE IF NOT EXISTS `lga`(
+	`lgaId` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`stateId` INT NULL,
+	`name` varchar(100),
+	FOREIGN KEY (`stateId`) REFERENCES `state`(`stateId`) ON DELETE CASCADE ON UPDATE CASCADE
+)COMMENT="Holds records of local government areas in different states";
+
+CREATE TABLE IF NOT EXISTS `diocese`(
+	`dioceseId` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`name` VARCHAR(100)
+)COMMENT="Holds records of dioceses";
+
+CREATE TABLE IF NOT EXISTS `deanery`(
+	`deaneryId` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`dioceseId` INT NULL,
+	`name` varchar(100),
+	FOREIGN KEY (`dioceseId`) REFERENCES `diocese`(`dioceseId`) ON DELETE CASCADE ON UPDATE CASCADE
+)COMMENT="Holds records of deaneries in different dioceses";
+
+CREATE TABLE IF NOT EXISTS `parish`(
+	`parishId` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`deaneryId` INT NULL,
+	`name` varchar(100),
+	FOREIGN KEY (`deaneryId`) REFERENCES `deanery`(`deaneryId`) ON DELETE SET NULL ON UPDATE CASCADE
+)COMMENT="Holds records of parishes in different deaneries";
+
+CREATE TABLE IF NOT EXISTS `station`(
+	`stationId` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`name` varchar(100),
+	`address` varchar(100),
+	`creationDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`picture` varchar(200)
+)COMMENT="Holds records of stations in this parish";
+
+CREATE TABLE IF NOT EXISTS `organisation`(
+	`organisationId` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`name` varchar(100),
+	`acronym` varchar(10),
+	`slogan` varchar(100)
+)COMMENT="Holds records of organisation in the church. Three major organisations exists in the catholic church regardless of the diocese, deanery, parish or station.";
+
+CREATE TABLE IF NOT EXISTS `society`(
+	`societyId` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`stationId` INT,
+	`organisationId` INT,
+	`name` varchar(100),
+	`acronym` varchar(10),
+	`slogan` varchar(100),
+	`meetingDay` varchar(40),
+	`meetingType` varchar(10),
+	`meetingFrequency` INT(1),
+	FOREIGN KEY (`stationId`) REFERENCES `station`(`stationId`) ON DELETE CASCADE,
+	FOREIGN KEY (`organisationId`) REFERENCES `organisation`(`organisationId`) ON DELETE CASCADE
+)COMMENT="Holds records of societies in the stations";
+
+CREATE TABLE IF NOT EXISTS `parishioner`(
+	`pId` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`regNo` INT NOT NULL,
+	`title` VARCHAR(10),
+	`surname` VARCHAR(20) NOT NULL,
+	`otherNames` VARCHAR(40) NOT NULL,
+	`resAddress` VARCHAR(100) NOT NULL,
+	`officeAddress` VARCHAR(100) NULL,
+	`occupation` varchar(100),
+	`phoneNo` varchar(14),
+	`email` varchar(40),
+	`passport` varchar(200),
+	`gender` varchar(6),
+	`maritalStatus` enum('Single','Married','Divorced','Widow','Widower'),
+	`dob` date,
+	`spouseName` varchar(100),
+	`stateId` int NULL,
+	`lgaId` int NULL,
+	`dioceseId` int NULL,
+	`deaneryId` int NULL,
+	`parishId` int NULL,
+	`stationId` int(11) NULL,
+	`societyId` int(11) NULL,
+	`organisationId` int(11) NULL,
+	`baptised` ENUM('True','False') DEFAULT 'False',
+	`confirmed` ENUM('True','False') DEFAULT 'False',
+	`communicant` ENUM('True','False') DEFAULT 'False',
+	`wedded` ENUM('True','False') DEFAULT 'False',
+	`status` varchar(10) DEFAULT 'Active', /* deleted, dormicile, dead, inactive, active*/
+	`whatCanYouDo` TINYTEXT,
+	`dateRegistered` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (`stateId`) REFERENCES `state`(`stateId`) ON DELETE SET NULL,
+	FOREIGN KEY (`lgaId`) REFERENCES `lga`(`lgaId`) ON DELETE SET NULL,
+	FOREIGN KEY (`dioceseId`) REFERENCES `diocese`(`dioceseId`) ON DELETE SET NULL,
+	FOREIGN KEY (`deaneryId`) REFERENCES `deanery`(`deaneryId`) ON DELETE SET NULL,
+	FOREIGN KEY (`parishId`) REFERENCES `parish`(`parishId`) ON DELETE SET NULL,
+	FOREIGN KEY (`stationId`) REFERENCES `station`(`stationId`) ON DELETE SET NULL,
+	FOREIGN KEY (`societyId`) REFERENCES `society`(`societyId`) ON DELETE SET NULL,
+	FOREIGN KEY (`organisationId`) REFERENCES `organisation`(`organisationId`) ON DELETE SET NULL
+)COMMENT='Holds details of parishioners';
+
+CREATE TABLE IF NOT EXISTS `nextOfKin`(
+	`id` int not null primary key auto_increment,
+	`pId` int,
+	`name` varchar(100),
+	`phoneNo` varchar(14),
+	`address` varchar(100),
+	FOREIGN KEY (`pId`) REFERENCES `parishioner`(`pId`) ON DELETE CASCADE
+)COMMENT="Holds details of next of kins of parishioners";
+
+
+CREATE TABLE IF NOT EXISTS `group`(
+	`groupId` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`name` varchar(100),
+	`acronym` varchar(10),
+	`slogan` varchar(100),
+	`meetingDay` varchar(40),
+	`meetingType` varchar(10),
+	`meetingFrequency` INT(1),
+	`groupType` enum('Pious Society','Lay Apostolate', 'Other Society')
+)COMMENT="Holds records of groups (pious societies and/or lay apostolates) in the parish";
+
+CREATE TABLE IF NOT EXISTS `priest`(
+	`priestId` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`name` varchar(100),
+	`phoneNo` varchar(14),
+	`email` varchar(40),
+	`dateResumed` DATE,
+	`dateLeft` Date,
+	`picture` varchar(200),
+	`type` enum('Pioneer Parish Priest','Parish Priest','Associate Parish Priest','Priest in Residence') DEFAULT 'Parish Priest'
+)COMMENT="Holds records of stations in this parish";
+
+CREATE TABLE IF NOT EXISTS `user` (
+	`userId` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`username` char(16) NOT NULL,
+	`password` varchar(255) NOT NULL,
+	`pId` int(11) NULL,
+	`priviledge` enum('Admin','Secretary','User'),
+	FOREIGN KEY (`pId`) REFERENCES `parishioner`(`pId`) ON DELETE SET NULL
+)COMMENT='Holds record of users with their priviledges who can use the application';
+
+CREATE TABLE IF NOT EXISTS `parishionerGroup` (
+	`id` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`groupId` INT,
+	`pId` INT NULL,
+	FOREIGN KEY (`pId`) REFERENCES `parishioner`(`pId`),
+	FOREIGN KEY (`groupId`) REFERENCES `group`(`groupId`) ON DELETE CASCADE
+)COMMENT='Holds the records of groups a parishioner belongs to';
+
+CREATE TABLE IF NOT EXISTS `matrimony` (
+	`matrimonyId` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`regNo` INT,
+	`dateReceived` date,
+	`witness` varchar(100),
+	`venue` varchar(200),
+	`groomName` varchar(100),
+	`brideName` varchar(100),
+	`brideParent` varchar(100),
+	`brideVillage` varchar(200),
+	`groomParent` varchar(100),
+	`groomVillage` varchar(200),
+	`sponsor` varchar(100)
+)COMMENT='Marriage register maintained at the parish to hold details of married parishioners';
+
+CREATE TABLE IF NOT EXISTS `confirmation` (
+	`confirmationId` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`pId` INT,
+	`dateReceived` date,
+	`minister` varchar(100),
+	`venue` varchar(200),
+	`sponsor` varchar(100),
+	FOREIGN KEY (`pId`) REFERENCES `parishioner`(`pId`)
+)COMMENT='COnfirmation record';
+
+CREATE TABLE IF NOT EXISTS`communion` (
+	`communionId` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`pId` INT,
+	`dateReceived` date,
+	`minister` varchar(100),
+	`venue` varchar(200),
+	`sponsor` varchar(100),
+	FOREIGN KEY (`pId`) REFERENCES `parishioner`(`pId`)
+)COMMENT='Record of communicants';
+
+CREATE TABLE IF NOT EXISTS `baptism` (
+	`baptismId` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`pId` INT,
+	`dateReceived` date,
+	`minister` varchar(100),
+	`venue` varchar(200),
+	`sponsor` varchar(100),
+	FOREIGN KEY (`pId`) REFERENCES `parishioner`(`pId`)
+)COMMENT='Baptism record';
+
+CREATE TABLE IF NOT EXISTS `death` (
+	`deathId` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`pId` int(11),
+	`deathDate` date,
+	`burialDate` date 
+)COMMENT='Holds record of dead parishioners';
+
+CREATE TABLE IF NOT EXISTS `societyHead`(
+	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`societyId` INT NOT NULL,
+	`pId` INT NOT NULL,
+	`position` VARCHAR(20) NOT NULL,
+	`startDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`endDate` DATE NULL,
+	FOREIGN KEY (`pId`) REFERENCES `parishioner` (`pId`) ON DELETE CASCADE, 
+	FOREIGN KEY (`societyId`) REFERENCES `society` (`societyId`) ON DELETE CASCADE
+)COMMENT='Holds record of leaders of different societies in the station';
+
+CREATE TABLE IF NOT EXISTS `stationHead`(
+	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`stationId` INT NULL,
+	`pId` INT NOT NULL,
+	`position` VARCHAR(20) NOT NULL,
+	`startDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`endDate` DATE NULL,
+	FOREIGN KEY (`pId`) REFERENCES `parishioner` (`pId`) ON DELETE CASCADE, 
+	FOREIGN KEY (`stationId`) REFERENCES `station` (`stationId`) ON DELETE SET NULL
+)COMMENT='Holds record of leaders of different stations in the parish';
+
+CREATE TABLE IF NOT EXISTS `organisationHeadStation`(
+	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`organisationId` INT NULL,
+	`stationId` INT NULL,
+	`pId` INT NOT NULL,
+	`position` VARCHAR(20) NOT NULL,
+	`startDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`endDate` DATE NULL,
+	FOREIGN KEY (`pId`) REFERENCES `parishioner` (`pId`) ON DELETE CASCADE,
+	FOREIGN KEY (`organisationId`) REFERENCES `organisation` (`organisationId`) ON DELETE SET NULL,
+	FOREIGN KEY (`stationId`) REFERENCES `station` (`stationId`) ON DELETE SET NULL
+)COMMENT='Holds record of leaders of different organisation in the stations';
+
+CREATE TABLE IF NOT EXISTS `organisationHeadParish`(
+	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`organisationId` INT NULL,
+	`pId` INT NOT NULL,
+	`position` VARCHAR(20) NOT NULL,
+	`startDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`endDate` DATE NULL,
+	FOREIGN KEY (`pId`) REFERENCES `parishioner` (`pId`) ON DELETE CASCADE,
+	FOREIGN KEY (`organisationId`) REFERENCES `organisation` (`organisationId`) ON DELETE SET NULL
+)COMMENT='Holds record of leaders of different organisations in the parish';
+
+CREATE TABLE IF NOT EXISTS `piousSocietyHead`(
+	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`groupId` INT NULL,
+	`pId` INT NOT NULL,
+	`position` VARCHAR(20) NOT NULL,
+	`startDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`endDate` DATE NULL,
+	FOREIGN KEY (`pId`) REFERENCES `parishioner` (`pId`) ON DELETE CASCADE,
+	FOREIGN KEY (`groupId`) REFERENCES `group` (`groupId`) ON DELETE SET NULL
+)COMMENT='Holds record of leaders of different pious societies in the parish';
+
+CREATE TABLE IF NOT EXISTS `layApostolateHead`(
+	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`groupId` INT NULL,
+	`pId` INT NOT NULL,
+	`position` VARCHAR(20) NOT NULL,
+	`startDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`endDate` DATE NULL,
+	FOREIGN KEY (`pId`) REFERENCES `parishioner` (`pId`) ON DELETE CASCADE,
+	FOREIGN KEY (`groupId`) REFERENCES `group` (`groupId`) ON DELETE SET NULL
+)COMMENT='Holds record of leaders of different lay apostolates in the parish';
+
+CREATE TABLE IF NOT EXISTS `pastoralCouncilHeadParish`(
+	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`pId` INT NOT NULL,
+	`position` VARCHAR(20) NOT NULL,
+	`startDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`endDate` DATE NULL,
+	FOREIGN KEY (`pId`) REFERENCES `parishioner` (`pId`) ON DELETE CASCADE
+)COMMENT='Holds record of leaders of the pastoral council in the parish';
+
+CREATE TABLE IF NOT EXISTS `laityCouncilHeadParish`(
+	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`pId` INT NOT NULL,
+	`position` VARCHAR(20) NOT NULL,
+	`startDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`endDate` DATE NULL,
+	FOREIGN KEY (`pId`) REFERENCES `parishioner` (`pId`) ON DELETE CASCADE
+)COMMENT='Holds record of leaders of the laity council in the parish';
+
+CREATE TABLE IF NOT EXISTS `pastoralCouncilHeadStation`(
+	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`stationId` INT,
+	`pId` INT NOT NULL,
+	`position` VARCHAR(20) NOT NULL,
+	`startDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`endDate` DATE NULL,
+	FOREIGN KEY (`pId`) REFERENCES `parishioner` (`pId`) ON DELETE CASCADE,
+	FOREIGN KEY (`stationId`) REFERENCES `station` (`stationId`) ON DELETE SET NULL
+)COMMENT='Holds record of leaders of the pastoral council in the parish';
+
+CREATE TABLE IF NOT EXISTS `laityCouncilHeadStation`(
+	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`stationId` INT,
+	`pId` INT NOT NULL,
+	`position` VARCHAR(20) NOT NULL,
+	`startDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`endDate` DATE NULL,
+	FOREIGN KEY (`pId`) REFERENCES `parishioner` (`pId`) ON DELETE CASCADE,
+	FOREIGN KEY (`stationId`) REFERENCES `station` (`stationId`) ON DELETE SET NULL
+)COMMENT='Holds record of leaders of the laity council in the parish';
+
+CREATE TABLE IF NOT EXISTS `sacramentLog`(
+	`logId` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`sacramentId` INT,
+	`pIdOld` INT,
+	`dateReceivedOld` date,
+	`ministerOld` varchar(100),
+	`venueOld` varchar(200),
+	`sponsorOld` varchar(100),
+	`pIdNew` INT,
+	`dateReceivedNew` date,
+	`ministerNew` varchar(100),
+	`venueNew` varchar(200),
+	`sponsorNew` varchar(100),
+	`sacrament` VARCHAR(20),
+	`action` enum('Update','Delete'),
+	`actionBy` VARCHAR(100),
+	`dateModified` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+)COMMENT='Hold the log actions (edit, delete) performed on Baptism, communion and confirmation registers';
+
+CREATE TABLE IF NOT EXISTS `matrimonyLog`(
+	`logId` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`matrimonyId` INT,
+	`regNoOld` INT,
+	`dateReceivedOld` date,
+	`witnessOld` varchar(100),
+	`venueOld` varchar(200),
+	`groomNameOld` varchar(100),
+	`brideNameOld` varchar(100),
+	`brideParentOld` varchar(100),
+	`brideVillageOld` varchar(200),
+	`groomParentOld` varchar(100),
+	`groomVillageOld` varchar(200),
+	`sponsorOld` varchar(100),
+	`regNoNew` INT,
+	`dateReceivedNew` date,
+	`witnessNew` varchar(100),
+	`venueNew` varchar(200),
+	`groomNameNew` varchar(100),
+	`brideNameNew` varchar(100),
+	`brideParentNew` varchar(100),
+	`brideVillageNew` varchar(200),
+	`groomParentNew` varchar(100),
+	`groomVillageNew` varchar(200),
+	`sponsorNew` varchar(100),
+	`action` enum('Update','Delete'),
+	`actionBy` VARCHAR(100),
+	`dateModified` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+)COMMENT='Hold the log actions (edit, delete) performed on marriage register';
+
+CREATE TRIGGER `baptismAfterUpdate`
+	AFTER UPDATE ON `baptism` FOR EACH ROW
+	INSERT INTO `sacramentLog`(
+		`sacramentId`,`pIdOld`,`dateReceivedOld`,`ministerOld`,`venueOld`,`sponsorOld`,
+		`pIdNew`,`dateReceivedNew`,`ministerNew`,`venueNew`,`sponsorNew`,`sacrament`,`action`
+	) VALUES(
+		OLD.`baptismId`,OLD.`pId`,OLD.`dateReceived`,OLD.`minister`,OLD.`sponsor`,
+		NEW.`pId`,NEW.`dateReceived`,NEW.`minister`,NEW.`sponsor`,'Baptism','Update'
+	);
+
+CREATE TRIGGER `baptismAfterDelete`
+	AFTER DELETE ON `baptism` FOR EACH ROW
+	INSERT INTO `sacramentLog`(
+		`sacramentId`,`pIdOld`,`dateReceivedOld`,`ministerOld`,`venueOld`,`sponsorOld`,`sacrament`,`action`
+	) VALUES(
+		OLD.`baptismId`,OLD.`pId`,OLD.`dateReceived`,OLD.`minister`,OLD.`sponsor`,'Baptism','Delete'
+	);
+
+CREATE TRIGGER `communionAfterUpdate`
+	AFTER UPDATE ON `communion` FOR EACH ROW
+	INSERT INTO `sacramentLog`(
+		`sacramentId`,`pIdOld`,`dateReceivedOld`,`ministerOld`,`venueOld`,`sponsorOld`,
+		`pIdNew`,`dateReceivedNew`,`ministerNew`,`venueNew`,`sponsorNew`,`sacrament`,`action`
+	) VALUES(
+		OLD.`communionId`,OLD.`pId`,OLD.`dateReceived`,OLD.`minister`,OLD.`sponsor`,
+		NEW.`pId`,NEW.`dateReceived`,NEW.`minister`,NEW.`sponsor`,'Communion','Update'
+	);
+
+CREATE TRIGGER `communionAfterDelete`
+	AFTER DELETE ON `communion` FOR EACH ROW
+	INSERT INTO `sacramentLog`(
+		`sacramentId`,`pIdOld`,`dateReceivedOld`,`ministerOld`,`venueOld`,`sponsorOld`,`sacrament`,`action`
+	) VALUES(
+		OLD.`communionId`,OLD.`pId`,OLD.`dateReceived`,OLD.`minister`,OLD.`sponsor`,'Communion','Delete'
+	);
+
+CREATE TRIGGER `confirmationAfterUpdate`
+	AFTER UPDATE ON `confirmation` FOR EACH ROW
+	INSERT INTO `sacramentLog`(
+		`sacramentId`,`pIdOld`,`dateReceivedOld`,`ministerOld`,`venueOld`,`sponsorOld`,
+		`pIdNew`,`dateReceivedNew`,`ministerNew`,`venueNew`,`sponsorNew`,`sacrament`,`action`
+	) VALUES(
+		OLD.`confirmationId`,OLD.`pId`,OLD.`dateReceived`,OLD.`minister`,OLD.`sponsor`,
+		NEW.`pId`,NEW.`dateReceived`,NEW.`minister`,NEW.`sponsor`,'Confirmation','Update'
+	);
+
+CREATE TRIGGER `confirmationAfterDelete`
+	AFTER DELETE ON `confirmation` FOR EACH ROW
+	INSERT INTO `sacramentLog`(
+		`sacramentId`,`pIdOld`,`dateReceivedOld`,`ministerOld`,`venueOld`,`sponsorOld`,`sacrament`,`action`
+	) VALUES(
+		OLD.`confirmationId`,OLD.`pId`,OLD.`dateReceived`,OLD.`minister`,OLD.`sponsor`,'Confirmation','Delete'
+	);
+
+CREATE TRIGGER `matrimonyAfterUpdate`
+	AFTER UPDATE ON `matrimony` FOR EACH ROW
+	INSERT INTO `matrimonyLog`(
+		`matrimonyId`,`regNoOld`,`dateReceivedOld`,`witnessOld`,`venueOld`,`groomNameOld`,
+		`brideNameOld`,`brideParentOld`,`brideVillageOld`,`groomParentOld`,`groomVillageOld`,`sponsorOld`,
+		`regNoNew`,`dateReceivedNew`,`witnessNew`,`venueNew`,`groomNameNew`,
+		`brideNameNew`,`brideParentNew`,`brideVillageNew`,`groomParentNew`,`groomVillageNew`,`sponsorNew`,`action`
+	) VALUES(
+		OLD.`matrimonyId`,OLD.`regNo`,OLD.`dateReceived`,OLD.`witness`,OLD.`venue`,OLD.`groomName`,
+		OLD.`brideName`,OLD.`brideParent`,OLD.`brideVillage`,OLD.`groomParent`,OLD.`groomVillage`,OLD.`sponsor`,
+		NEW.`regNo`,NEW.`dateReceived`,NEW.`witness`,NEW.`venue`,NEW.`groomName`,
+		NEW.`brideName`,NEW.`brideParent`,NEW.`brideVillage`,NEW.`groomParent`,NEW.`groomVillage`,NEW.`sponsor`,'Update'
+	);
+
+CREATE TRIGGER `matrimonyAfterDelete`
+	AFTER DELETE ON `matrimony` FOR EACH ROW
+	INSERT INTO `matrimonyLog`(
+		`matrimonyId`,`regNoOld`,`dateReceivedOld`,`witnessOld`,`venueOld`,`groomNameOld`,
+		`brideNameOld`,`brideParentOld`,`brideVillageOld`,`groomParentOld`,`groomVillageOld`,`sponsorOld`,`action`
+	) VALUES(
+		OLD.`matrimonyId`,OLD.`regNo`,OLD.`dateReceived`,OLD.`witness`,OLD.`venue`,OLD.`groomName`,
+		OLD.`brideName`,OLD.`brideParent`,OLD.`brideVillage`,OLD.`groomParent`,OLD.`groomVillage`,OLD.`sponsor`,'Delete'
+	);

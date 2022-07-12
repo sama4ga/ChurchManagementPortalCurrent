@@ -1,0 +1,65 @@
+﻿<Page x:Class="ChurchManagementPortal.pgAddLayApostolate"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ChurchManagementPortal"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Add Lay Apostolate">
+
+    <Grid>
+        <ScrollViewer>
+            <Grid HorizontalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label Content="Add New Lay Apostolate" Style="{StaticResource lblHeading}" Grid.Row="0" Grid.ColumnSpan="2" />
+                <Label Content="Name of Apostolate" Grid.Row="1" Grid.Column="0"/>
+                <TextBox x:Name="txtSocietyName" Grid.Row="1" Grid.Column="1" Width="300" Margin="0,0,0,40"/>
+                <Label Style="{StaticResource lblError}" x:Name="lblSocietyNameError" Grid.Row="1" Grid.Column="1" Margin="0,10,0,0"/>
+                <Label Content="Slogan of Apostolate" Grid.Row="2" Grid.Column="0"/>
+                <TextBox x:Name="txtSocietySlogan" Grid.Row="2" Grid.Column="1" Width="300" Margin="0,0,0,40"/>
+                <Label Style="{StaticResource lblError}" x:Name="lblSocietySloganError" Grid.Row="2" Grid.Column="1" Margin="0,10,0,0"/>
+                <Label Content="Meeting Day" Grid.Row="3" Grid.Column="0"/>
+                <ComboBox x:Name="cmbMeetingDay" Grid.Row="3" Grid.Column="1" Width="300" Margin="0,0,0,40">
+                    <ComboBoxItem Content="Sunday" />
+                    <ComboBoxItem Content="Monday" />
+                    <ComboBoxItem Content="Tuesday" />
+                    <ComboBoxItem Content="Wednesday" />
+                    <ComboBoxItem Content="Thursday" />
+                    <ComboBoxItem Content="Friday" />
+                    <ComboBoxItem Content="Saturday" />
+                </ComboBox>
+                <Label Style="{StaticResource lblError}" x:Name="lblMeetingDayError" Grid.Row="3" Grid.Column="1" Margin="0,10,0,0"/>
+                <Label Content="Meeting Type" Grid.Row="4" Grid.Column="0"/>
+                <ComboBox x:Name="cmbMeetingType" Grid.Row="4" Grid.Column="1" Width="300" Margin="0,0,0,40">
+                    <ComboBoxItem Content="Daily" />
+                    <ComboBoxItem Content="Weekly" IsSelected="True" />
+                    <ComboBoxItem Content="Bi-Monthly" />
+                    <ComboBoxItem Content="Monthly" />
+                    <ComboBoxItem Content="Quarterly" />
+                </ComboBox>
+                <Label Style="{StaticResource lblError}" x:Name="lblMeetingTypeError" Grid.Row="4" Grid.Column="1" Margin="0,10,0,0"/>
+                <Label Content="Meeting Frequency" Grid.Row="5" Grid.Column="0"/>
+                <ComboBox x:Name="cmbMeetingFreq" Grid.Row="5" Grid.Column="1" Width="300" Margin="0,0,0,40">
+                    <ComboBoxItem Content="1" IsSelected="True" />
+                    <ComboBoxItem Content="2" />
+                </ComboBox>
+                <Label Style="{StaticResource lblError}" x:Name="lblMeetingFreqError" Grid.Row="5" Grid.Column="1" Margin="0,10,0,0"/>
+                <Button x:Name="btnCreateApostolate" Click="btnCreateApostolate_Click"  Content="Add New Apostolate" Grid.Row="6" Grid.Column="1" Style="{StaticResource btnBlue}" />
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Page>

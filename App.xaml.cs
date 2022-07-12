@@ -21,6 +21,9 @@ namespace ChurchManagementPortal
             {
                 controller.Start();
             }
+            // To change the main window of an application using code
+            //Current.MainWindow = new winLogin();
+            //Current.MainWindow.Show();
 
         }
     }
